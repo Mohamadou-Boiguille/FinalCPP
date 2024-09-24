@@ -93,3 +93,17 @@ void Bureaucrat::relegate()
 	std::cout << name << " is relegated from grade " << this->grade - 1;
 	std::cout << " to " << getGrade() << std::endl;
 }
+
+void Bureaucrat::signForm(Form &form) const
+{
+	// try
+    // {
+        form.beSigned(*this);
+    //     std::cout << this->getName() << " executed " << form.getName() << std::endl;
+    // }
+    // catch (std::exception &e)
+    // {
+    //     std::cerr << this->getName() << " couldn't execute " << form.getName() << " because: " << e.what() << std::endl;
+    // }
+}
+

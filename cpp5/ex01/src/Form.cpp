@@ -75,16 +75,16 @@ std::string Form ::getName()
   return (this->name);
 }
 
-void Form ::beSigned(Bureaucrat *bcrat)
+void Form ::beSigned(const Bureaucrat &bcrat)
 {
   if (this->isFormSigned == true)
   {
     std::cout << this->getName() << " is already signed." << std::endl;
   }
-  else if (bcrat->getGrade() <= this->getMinSign())
+  else if (bcrat.getGrade() <= this->getMinSign())
   {
     this->isFormSigned = true;
-    std::cout << bcrat->getName() << " signed ";
+    std::cout << bcrat.getName() << " signed ";
     std::cout << this->getName() << "." << std::endl;
   }
   else

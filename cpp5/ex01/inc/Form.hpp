@@ -4,6 +4,8 @@
 # include "Bureaucrat.hpp"
 # include <iostream>
 
+class Bureaucrat;
+
 class Form
 {
   public:
@@ -26,7 +28,7 @@ class Form
 	unsigned int getMinExec();
 	bool getIfSigned();
 	std::string getName();
-	void beSigned(Bureaucrat *bcrat);
+	void beSigned(const Bureaucrat &bcrat);
 
   private:
 	const std::string name;

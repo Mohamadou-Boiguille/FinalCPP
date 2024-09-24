@@ -13,23 +13,15 @@ Bureaucrat *announce(std::string name, int rank)
 
 Form *createForms(std::string formName, int requiredSign, int requiredExec)
 {
-    try
-    {
         Form *form = new Form(formName, requiredSign, requiredExec);
         return form;
-    }
-    catch (std::exception &e)
-    {
-        std::cout << e.what() << std::endl;
-    }
-    return NULL;
 }
 
 void signForms(Form *form, Bureaucrat *bureaucrat)
 {
     try
     {
-        form->beSigned(bureaucrat);
+        form->beSigned(*bureaucrat);
     }
     catch (std::exception &e)
     {
@@ -72,6 +64,7 @@ int main(void)
     std::cout << "\n==== create Forms ====" << std::endl;
     for (int i = 0; i < 5; i++)
     {
+        validForms[i] = 0;
         try
         {
             formArr[i] = createForms(strArr[i], requiredSign[i], requiredExec[i]);
@@ -85,7 +78,7 @@ int main(void)
     std::cout << "\n==== << operator for forms ====" << std::endl;
     for (int i = 0; i < 5; i++)
     {
-        if (validForms[i])
+        if (validForms[i] == 1)
             std::cout << *formArr[i];
     }
 
@@ -97,6 +90,7 @@ int main(void)
             signForms(formArr[i], bureaucratArray[i]);
         }
     }
+
     std::cout << "\n==== delete allocated memory ====" << std::endl;
     for (int i = 0; i < 5; i++)
     {
