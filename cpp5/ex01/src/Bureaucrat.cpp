@@ -96,14 +96,14 @@ void Bureaucrat::relegate()
 
 void Bureaucrat::signForm(Form &form) const
 {
-	// try
-    // {
+	try
+    {
         form.beSigned(*this);
-    //     std::cout << this->getName() << " executed " << form.getName() << std::endl;
-    // }
-    // catch (std::exception &e)
-    // {
-    //     std::cerr << this->getName() << " couldn't execute " << form.getName() << " because: " << e.what() << std::endl;
-    // }
+        std::cout << this->getName() << " sign " << form.getName() << std::endl;
+    }
+    catch (std::exception &e)
+    {
+        std::cerr << this->getName() << " couldn't sign " << form.getName() << " because: " << e.what() << std::endl;
+    }
 }
 

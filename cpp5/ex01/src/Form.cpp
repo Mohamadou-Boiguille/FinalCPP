@@ -39,8 +39,6 @@ Form &Form ::operator=(const Form &other)
   if (this != &other)
   {
     this->isFormSigned = other.isFormSigned;
-    this->minSign = other.minSign;
-    this->minExec = other.minExec;
   }
   return (*this);
 }

@@ -33,8 +33,8 @@ class Form
   private:
 	const std::string name;
 	bool isFormSigned;
-	unsigned int minExec;
-	unsigned int minSign;
+	const unsigned int minExec;
+	const unsigned int minSign;
 };
 
 std::ostream &operator<<(std::ostream &os, Form &form);

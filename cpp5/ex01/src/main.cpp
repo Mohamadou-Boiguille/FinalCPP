@@ -99,5 +99,18 @@ int main(void)
         if (validForms[i])
             delete formArr[i];
     }
+
+    std::cout << "\n==== test Bureaucrat->signForm() ====" << std::endl;
+
+    Bureaucrat *byBureaucrat = new Bureaucrat("bureaucrat1", 150);
+    Bureaucrat *byBureaucratTwo = new Bureaucrat("test bureaucrat2", 100);
+
+    Form *testForm = new Form("test form", 140, 140);
+    byBureaucrat->signForm(*testForm);
+    byBureaucratTwo->signForm(*testForm);
+
+    delete byBureaucrat;
+    delete testForm;
+
     return 0;
 }
