@@ -14,7 +14,7 @@ int main (void) {
 			break;
 		//check for eof
 		{
-			ScalarConverter conversion(static_cast<std::string>(input));
+			ScalarConverter::convert(static_cast<std::string>(input));
 		}
 		std::cout << std::endl;
     } while (1);

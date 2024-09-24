@@ -13,17 +13,18 @@
 class ScalarConverter
 {
   public:
+  // inversion convert et copleen
+	static void convert(std::string& str);
+
+  private:
 	ScalarConverter();
 	ScalarConverter(const ScalarConverter &other);
 	ScalarConverter &operator=(const ScalarConverter &other);
 	~ScalarConverter();
 	ScalarConverter(std::string str);
-
-  private:
 	void removeLeadingSacpesAndZeros(std::string& str);
 	void formatDisplay(std::string& str, int index);
 	void display(void);
-	char convert(std::string& str);
 	bool isInteger(const std::string& str);
 	bool isCharacter(const std::string& str);
 	bool isFloat(const std::string& str);

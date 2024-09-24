@@ -182,7 +182,7 @@ bool	isValidNb(const std::string& str)
     return !str.empty() && it == str.end() - fTerminated;
 }
 
-char ScalarConverter::convert(std::string& str)
+void ScalarConverter::convert(std::string& str)
 {
 	if (str == "-inf" || str == "-inff")
 		return NINF;
