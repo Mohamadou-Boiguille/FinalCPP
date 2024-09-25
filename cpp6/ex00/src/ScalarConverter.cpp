@@ -22,21 +22,21 @@
 #define NINF 7
 #define PINF 8
 
+int ScalarConverter::static_type;
+double ScalarConverter::static_nb = 5;
+const char* ScalarConverter::typeDisplay[4] = {
+    "char\t: ", "int\t: ", "double\t: ", "float\t: "
+};
+
 ScalarConverter::ScalarConverter() {}
 
-ScalarConverter::~ScalarConverter() {
-}
+ScalarConverter::~ScalarConverter() {}
 
-void ScalarConverter::convert(std::string str)
+void ScalarConverter::convert(std::string &str)
 {
-	typeDisplay[1] = "int\t: ";
-	typeDisplay[0] = "char\t: ";
-	typeDisplay[2] = "double\t: ";
-	typeDisplay[3] = "float\t: ";
-	this->removeLeadingSacpesAndZeros(str);
-	std::cout << "test : |" << str << "|" << sizeof(double)  << "|" << sizeof(long double)<< std::endl;
-	this->type = this->makeConversion(str);
-    this->display();
+	removeLeadingSacpesAndZeros(str);
+	static_type = makeConversion(str);
+    display();
 }
 
 ScalarConverter::ScalarConverter(const ScalarConverter& other) {
@@ -68,38 +68,36 @@ void ScalarConverter::removeLeadingSacpesAndZeros(std::string& str)
 std::string ScalarConverter::getNumStr(int printTo)
 {
 	std::ostringstream oss;
-	if (this->type == NANNB && printTo >= DBL)
+	if (static_type == NANNB && printTo >= DBL)
 		return "nan";
-	if (this->type == PINF && printTo >= DBL)
+	if (static_type == PINF && printTo >= DBL)
 		return "+inf";
-	if (this->type == NINF && printTo >= DBL)
+	if (static_type == NINF && printTo >= DBL)
 		return "-inf";
-	if (this->type == NANNB || this->type == PINF || this->type == NINF)
-		return "impossible";
-	if (this->type == NONE)
+	if (static_type == NANNB || static_type == PINF || static_type == NINF || static_type == NONE)
 		return "impossible";
 	if (printTo == INT) {
-		if (overflowing(this->nb, INT))
+		if (overflowing(static_nb, INT))
 			return "impossible";
-		oss << static_cast<int>(this->nb);
-	} 
-	else if (this->nb == 0)
-		oss << "0";
+		oss << static_cast<int>(static_nb);
+	}
 	else if (printTo == CHR) {
-		if (this->nb > 127 || this->nb < 0)
+		if (static_nb > 127 || static_nb < 0 || std::floor(static_nb) != static_nb)
 			return "impossible";
-		if (isprint(static_cast<char>(this->nb)))
-			oss << static_cast<char>(this->nb);
+		if (isprint(static_cast<char>(static_nb)))
+		{
+			oss << static_cast<char>(static_nb);
+		}
 		else
 			return "not displayable";
 	} else if (printTo == DBL) {
-		if (overflowing(this->nb, DBL))
+		if (overflowing(static_nb, DBL))
 			return "impossible";
-		oss << std::setprecision(15) << static_cast<double>(this->nb);
+		oss << std::setprecision(15) << static_cast<double>(static_nb);
 	} else if (printTo == FLT) {
-		if (overflowing(this->nb, FLT))
+		if (overflowing(static_nb, FLT))
 			return "impossible";
-		oss << std::setprecision(6) << static_cast<float>(this->nb);
+		oss << std::setprecision(6) << static_cast<float>(static_nb);
 	}
 	return oss.str();
 }
@@ -114,7 +112,7 @@ void ScalarConverter::formatDisplay(std::string& str, int index) {
         }
         str.erase(zeroPosition + 1);
     }
-	if (this->type <= FLT && index >= DBL && str.find('.') == std::string::npos)
+	if (static_type <= FLT && index >= DBL && str.find('.') == std::string::npos)
 		str += ".0";
 	if (index == FLT)
 		str += "f";
@@ -128,7 +126,7 @@ void ScalarConverter::display()
 	{
 		numStr = getNumStr(i);
 		formatDisplay(numStr, i);
-		std::cout << this->typeDisplay[i - 1];
+		std::cout << typeDisplay[i - 1];
 		std::cout << numStr;
 		std::cout << std::endl;
 	}
@@ -182,7 +180,7 @@ bool	isValidNb(const std::string& str)
     return !str.empty() && it == str.end() - fTerminated;
 }
 
-void ScalarConverter::makeConversion(std::string& str)
+int ScalarConverter::makeConversion(std::string str)
 {
 	if (str == "-inf" || str == "-inff")
 		return NINF;
@@ -192,18 +190,18 @@ void ScalarConverter::makeConversion(std::string& str)
 		return NANNB;
 	if (str.find_first_not_of('0') == std::string::npos)
 	{
-		this->nb = 0;
+		static_nb = 0;
 		return INT;
 	}
-	if (this->isCharacter(str))
+	if (isCharacter(str))
 		return CHR;
 	if (isValidNb(str) == false)
 		return NONE;
-	if (this->isInteger(str))
+	if (isInteger(str))
 		return INT;
-	if (this->isDouble(str))
+	if (isDouble(str))
 		return DBL;
-	if (this->isFloat(str))
+	if (isFloat(str))
 		return FLT;
 	return NONE;
 }
@@ -211,12 +209,12 @@ void ScalarConverter::makeConversion(std::string& str)
 bool ScalarConverter::isCharacter(const std::string& str) {
 	if (str.at(0) == '\'' && str.at(2) == '\'' && str.length() == 3)
 	{
-		this->nb = static_cast<double>(str.at(1));
+		static_nb = static_cast<double>(str.at(1));
 		return true;
 	}	
 	if ((str.length() == 1 && !isdigit(str.at(0))))
 	{
-		this->nb = static_cast<double>(str[0]);
+		static_nb = static_cast<double>(str[0]);
 		return true;
 	}
 	return false;
@@ -230,7 +228,7 @@ bool ScalarConverter::isInteger(const std::string& str) {
     iss >> num;
 	if (iss >> remain || overflowing(num, INT))
 		return false;
-	this->nb = static_cast<double>(num);
+	static_nb = static_cast<double>(num);
 	return true;
 }
 
@@ -244,7 +242,7 @@ bool ScalarConverter::isDouble(const std::string& str) {
 		return false;
 	if (!iss.eof())
 		return false;
-	this->nb = num;
+	static_nb = num;
 	return true;
 }
 
@@ -258,6 +256,6 @@ bool ScalarConverter::isFloat(const std::string& str) {
 	iss >> remain;
 	if (remain != 'f' || overflowing(num, FLT) || iss >> remain)
 		return false;
-	this->nb = static_cast<double>(num);
+	static_nb = static_cast<double>(num);
 	return true;
 }

@@ -2,21 +2,14 @@
 #include <iostream>
 #include <string>
 
-int main (void) {
-
-    std::string input;
-	do {
-        std::cout << "ENTER A NUMBER : ";
-		std::getline(std::cin, input);
-		if (input.empty())
-			continue;
-		if (input == "exit")
-			break;
-		//check for eof
-		{
-			ScalarConverter::convert(static_cast<std::string>(input));
-		}
-		std::cout << std::endl;
-    } while (1);
-    return 0;
+int main(int argc, char *argv[])
+{
+	if (argc != 2 || sizeof(argv[1]) == 0)
+	{
+		std::cout << "Invalid input - Usage: ./Scalar + one argument" << std::endl;
+		return 1;
+	}
+    std::string str(argv[1]);
+	ScalarConverter::convert(str);
+	return 0;
 }
