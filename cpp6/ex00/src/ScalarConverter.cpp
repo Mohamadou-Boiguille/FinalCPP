@@ -27,7 +27,7 @@ ScalarConverter::ScalarConverter() {}
 ScalarConverter::~ScalarConverter() {
 }
 
-ScalarConverter::ScalarConverter(std::string str)
+void ScalarConverter::convert(std::string str)
 {
 	typeDisplay[1] = "int\t: ";
 	typeDisplay[0] = "char\t: ";
@@ -35,7 +35,7 @@ ScalarConverter::ScalarConverter(std::string str)
 	typeDisplay[3] = "float\t: ";
 	this->removeLeadingSacpesAndZeros(str);
 	std::cout << "test : |" << str << "|" << sizeof(double)  << "|" << sizeof(long double)<< std::endl;
-	this->type = this->convert(str);
+	this->type = this->makeConversion(str);
     this->display();
 }
 
@@ -182,7 +182,7 @@ bool	isValidNb(const std::string& str)
     return !str.empty() && it == str.end() - fTerminated;
 }
 
-void ScalarConverter::convert(std::string& str)
+void ScalarConverter::makeConversion(std::string& str)
 {
 	if (str == "-inf" || str == "-inff")
 		return NINF;

@@ -21,7 +21,7 @@ class ScalarConverter
 	ScalarConverter(const ScalarConverter &other);
 	ScalarConverter &operator=(const ScalarConverter &other);
 	~ScalarConverter();
-	ScalarConverter(std::string str);
+	void makeConversion(std::string str);
 	void removeLeadingSacpesAndZeros(std::string& str);
 	void formatDisplay(std::string& str, int index);
 	void display(void);
